@@ -9,10 +9,10 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
+    container:
+      image: localhost/forgejo-job:1
     steps:
-      - uses: actions/checkout@v4
-      - name: tmux and shellcheck
-        run: |
-          sudo apt-get update -q
-          sudo apt-get install -y -q shellcheck tmux
+      - uses: https://code.forgejo.org/actions/checkout@v4
+      - name: tmux
+        run: apt-get update -q && apt-get install -y -q --no-install-recommends tmux
       - run: make check
