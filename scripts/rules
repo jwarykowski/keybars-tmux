@@ -1,0 +1,24 @@
+#!/bin/sh
+# rules: adds rules for the events keybars-tmux sends, unless rules with
+# their names are already there.
+set -eu
+
+kp=${KEYBARS_PRO:-keybars-pro}
+command -v "$kp" >/dev/null 2>&1 || {
+  echo "keybars-tmux needs keybars Pro's keybars-pro command: App settings, Install the command-line tool" >&2
+  exit 1
+}
+have=$("$kp" rules list) || {
+  echo "keybars-tmux: is keybars Pro running?" >&2
+  exit 1
+}
+add() {
+  if printf '%s\n' "$have" | grep -qF -- "$1"; then
+    echo "keybars-tmux: \"$1\" is already there"
+  else
+    "$kp" rules add "$@"
+    echo "keybars-tmux: added \"$1\""
+  fi
+}
+add "tmux bell" tmux.bell -keys top-right -colour amber -effect pulse -until -clear-on tmux.seen
+add "tmux quiet" tmux.quiet -keys top-right -colour blue -effect breathe -clear-on tmux.seen

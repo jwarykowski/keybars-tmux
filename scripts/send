@@ -1,0 +1,6 @@
+#!/bin/sh
+# send <keybars-pro> <event> <session>: to keybars Pro's alert
+# rules, quietly when it isn't running. The session is the event's repo, so
+# a rule can light something different for one session.
+kp=$1 event=$2 session=$3
+exec "$kp" alert -q -repo "$session" "$event" >/dev/null 2>&1
